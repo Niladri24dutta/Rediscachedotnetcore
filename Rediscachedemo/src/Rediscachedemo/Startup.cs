@@ -19,13 +19,13 @@ namespace Rediscachedemo
             services.AddMvc();
             services.AddDistributedRedisCache(option =>
             {
-                option.Configuration = "127.0.0.1";
+                option.Configuration = "127.0.0.1:6379";
                 option.InstanceName = "master";
             });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,IDistributedCache distributedCache)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             app.UseMvc(routes =>
             {
