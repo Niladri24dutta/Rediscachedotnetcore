@@ -8,19 +8,31 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Configuration;
 
 namespace Rediscachedemo
 {
     public class Startup
     {
-        
+        public Startup(IHostingEnvironment env)
+        {
+            // Set up configuration sources.
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            Configuration = builder.Build();
+        }
+
+        public IConfigurationRoot Configuration { get; set; }
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddDistributedRedisCache(option =>
+            services.AddDistributedSqlServerCache(opt =>
             {
-                option.Configuration = "127.0.0.1:6379";
-                option.InstanceName = "master";
+                opt.ConnectionString = Configuration.GetConnectionString("DefaultConnection");
+                opt.SchemaName = "dbo";
+                opt.TableName = "SQLCache";
             });
         }
 
@@ -29,7 +41,7 @@ namespace Rediscachedemo
         {
             app.UseMvc(routes =>
             {
-                routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute("default", "{controller=SqlCaching}/{action=Index}/{id?}");
             });
         }
     }
