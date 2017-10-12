@@ -28,11 +28,17 @@ namespace Rediscachedemo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddDistributedSqlServerCache(opt =>
+            //services.AddDistributedSqlServerCache(opt =>
+            //{
+            //    opt.ConnectionString = Configuration.GetConnectionString("DefaultConnection");
+            //    opt.SchemaName = "dbo";
+            //    opt.TableName = "SQLCache";
+            //});
+
+            services.AddDistributedRedisCache(option =>
             {
-                opt.ConnectionString = Configuration.GetConnectionString("DefaultConnection");
-                opt.SchemaName = "dbo";
-                opt.TableName = "SQLCache";
+                option.Configuration = Configuration.GetConnectionString("RedisConnection");
+                option.InstanceName = "master";
             });
         }
 
@@ -41,7 +47,7 @@ namespace Rediscachedemo
         {
             app.UseMvc(routes =>
             {
-                routes.MapRoute("default", "{controller=SqlCaching}/{action=Index}/{id?}");
+                routes.MapRoute("default", "{controller=RedisAzure}/{action=Index}/{id?}");
             });
         }
     }
