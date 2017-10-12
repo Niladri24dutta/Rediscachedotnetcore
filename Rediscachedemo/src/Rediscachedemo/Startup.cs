@@ -28,12 +28,7 @@ namespace Rediscachedemo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddDistributedSqlServerCache(opt =>
-            {
-                opt.ConnectionString = Configuration.GetConnectionString("DefaultConnection");
-                opt.SchemaName = "dbo";
-                opt.TableName = "SQLCache";
-            });
+            services.AddMemoryCache();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,7 +36,7 @@ namespace Rediscachedemo
         {
             app.UseMvc(routes =>
             {
-                routes.MapRoute("default", "{controller=SqlCaching}/{action=Index}/{id?}");
+                routes.MapRoute("default", "{controller=MemoryCache}/{action=Index}/{id?}");
             });
         }
     }
