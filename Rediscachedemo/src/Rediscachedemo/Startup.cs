@@ -28,13 +28,6 @@ namespace Rediscachedemo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            //services.AddDistributedSqlServerCache(opt =>
-            //{
-            //    opt.ConnectionString = Configuration.GetConnectionString("DefaultConnection");
-            //    opt.SchemaName = "dbo";
-            //    opt.TableName = "SQLCache";
-            //});
-
             services.AddDistributedRedisCache(option =>
             {
                 option.Configuration = Configuration.GetConnectionString("RedisConnection");
