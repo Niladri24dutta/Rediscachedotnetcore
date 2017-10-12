@@ -34,7 +34,7 @@ namespace Rediscachedemo
         {
             app.UseMvc(routes =>
             {
-                routes.MapRoute("default", "{controller=SqlCaching}/{action=Index}/{id?}");
+                routes.MapRoute("default", "{controller=MemoryDistributed}/{action=Index}/{id?}");
             });
         }
     }
